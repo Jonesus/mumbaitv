@@ -1,0 +1,66 @@
+{
+  // Frontend specific settings
+  "javascript.preferences.quoteStyle": "single",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "[javascript]": {
+    "editor.tabSize": 2
+  },
+  "[javascriptreact]": {
+    "editor.tabSize": 2
+  },
+
+  "typescript.preferences.quoteStyle": "single",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "[typescript]": {
+    "editor.tabSize": 2
+  },
+  "[typescriptreact]": {
+    "editor.tabSize": 2
+  },
+
+  "[css]": {
+    "editor.tabSize": 2
+  },
+
+  "editor.formatOnSave": true,
+  "eslint.autoFixOnSave": false,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    { "language": "typescript", "autoFix": true },
+    { "language": "typescriptreact", "autoFix": true }
+  ],
+  "eslint.workingDirectories": [
+    { "directory": "./front", "changeProcessCWD": true }
+  ],
+
+  // Backend specific settings
+  "python.pythonPath": "back/.venv/bin/python3",
+  "python.envFile": "${workspaceRoot}/.env",
+  "python.linting.pep8Enabled": true,
+  "python.linting.pep8Args": ["--ignore=W391,E501,W503"],
+  "python.linting.pylintEnabled": true,
+  "python.linting.pylintArgs": [
+    "--load-plugins=pylint_django",
+    "--disable=redefined-builtin,no-self-use,method-hidden,too-few-public-methods,too-many-ancestors,arguments-differ,abstract-method,bad-continuation",
+    "--good-names=i,j,k,ex,e,Run,_,pk,x,y,router,logger"
+  ],
+  "python.formatting.provider": "black",
+  "[python]": {
+    "editor.formatOnPaste": false,
+    "editor.formatOnSave": true
+  },
+
+  // Common settings
+  "editor.snippetSuggestions": "none",
+  "[yaml]": {
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 80
+  },
+  "[markdown]": {
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 80
+  }
+}

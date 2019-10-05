@@ -1,0 +1,67 @@
+{
+  "name": "mumbaitv",
+  "version": "0.0.1",
+  "description": "Successor to old school Bombay TV",
+  "keywords": [
+    "React.js",
+    "Next.js",
+    "Typescript"
+  ],
+  "author": "Joonas Palosuo <joonas.palosuo@ayy.fi>",
+  "repository": {
+    "url": "https://github.com/jonesus/mumbaitv"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start": "next start",
+    "dev": "next",
+    "build": "next build",
+    "export": "npm run build && next export",
+    "clean": "rm -rf .next && rm -rf out"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{json,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "next": "9.0.7",
+    "react": "16.10.2",
+    "react-dom": "16.10.2",
+    "@zeit/next-typescript": "1.1.1"
+  },
+  "devDependencies": {
+    "@types/next": "8.0.6",
+    "@types/react": "16.9.5",
+    "@types/react-dom": "16.9.1",
+    "@typescript-eslint/eslint-plugin": "2.3.2",
+    "@typescript-eslint/parser": "2.3.2",
+    "@babel/core": "7.6.2",
+    "babel-plugin-module-resolver": "3.2.0",
+    "eslint": "6.5.1",
+    "eslint-config-airbnb": "18.0.1",
+    "eslint-config-prettier": "6.3.0",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-prettier": "3.1.1",
+    "eslint-plugin-react": "7.16.0",
+    "eslint-plugin-react-hooks": "2.1.2",
+    "file-loader": "4.2.0",
+    "husky": "3.0.8",
+    "lint-staged": "9.4.1",
+    "prettier": "1.18.2",
+    "typescript": "3.6.3",
+    "url-loader": "2.2.0"
+  }
+}

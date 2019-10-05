@@ -1,0 +1,57 @@
+module.exports = {
+  extends: [
+    'airbnb',
+    'plugin:prettier/recommended',
+    'prettier/react',
+    'plugin:@typescript-eslint/recommended',
+  ],
+  plugins: ['react-hooks'],
+  settings: {
+    'import/resolver': {
+      node: {
+        paths: ['./'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
+      },
+    },
+  },
+  env: {
+    browser: true,
+    commonjs: true,
+    es6: true,
+    jest: true,
+    node: true,
+  },
+  rules: {
+    '@typescript-eslint/indent': ['error', 2],
+    '@typescript-eslint/camelcase': ['off'],
+    '@typescript-eslint/interface-name-prefix': ['off'],
+    '@typescript-eslint/explicit-function-return-type': ['off'],
+    '@typescript-eslint/explicit-member-accessibility': ['off'],
+    'react/jsx-filename-extension': ['warn', { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
+    'react/jsx-props-no-spreading': ['off'],
+    'react/destructuring-assignment': ['off'],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+    'no-console': ['off'],
+    'react/prop-types': ['off'],
+    'import/prefer-default-export': ['off'],
+    'prefer-destructuring': ['off'],
+    'global-require': ['off'],
+    'jsx-quotes': ['error', 'prefer-double'],
+    quotes: [2, 'single'],
+    'max-len': [
+      'warn',
+      {
+        code: 100,
+        tabWidth: 2,
+        comments: 100,
+        ignoreComments: false,
+        ignoreTrailingComments: true,
+        ignoreUrls: true,
+        ignoreStrings: true,
+        ignoreTemplateLiterals: true,
+        ignoreRegExpLiterals: true,
+      },
+    ],
+  },
+};
