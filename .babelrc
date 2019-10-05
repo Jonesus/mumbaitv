@@ -1,7 +1,8 @@
 {
   "presets": ["next/babel", "@zeit/next-typescript/babel"],
   "plugins": [
-   [
+    "styled-jsx/babel",
+    [
       "module-resolver",
       {
         "root": ["./"],
