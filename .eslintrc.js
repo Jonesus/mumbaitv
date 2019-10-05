@@ -38,6 +38,7 @@ module.exports = {
     'prefer-destructuring': ['off'],
     'global-require': ['off'],
     'jsx-quotes': ['error', 'prefer-double'],
+    'jsx-a11y/media-has-caption': ['off'],
     quotes: [2, 'single'],
     'max-len': [
       'warn',
