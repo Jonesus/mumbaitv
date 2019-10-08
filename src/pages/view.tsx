@@ -1,80 +1,78 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import base64 from 'base-64';
 
-interface ITrackRow {
-  startTime: number;
-  endTime: number;
-  text: string;
-}
-
-type ITrackData = ITrackRow[];
+import { TrackInput } from 'src/components/TrackInput';
+import {
+  ITrackRow,
+  subStringToTrackData,
+  videoTimeToSubTime,
+  trackDataToSubString,
+} from 'src/helpers';
 
 const H1 = styled.h1`
   font-size: 3rem;
 `;
 
-const pad = (num: number, size: number) => `000${num}`.slice(size * -1);
-
-const videoTimeToSubTime = (timeInSeconds: number) => {
-  const time = parseFloat(timeInSeconds.toFixed(3));
-  const hours = Math.floor(time / 60 / 60);
-  const minutes = Math.floor(time / 60) % 60;
-  const seconds = Math.floor(time - minutes * 60);
-  const milliseconds = time.toFixed(3).slice(-3);
-  const strTime = `${pad(hours, 2)}:${pad(minutes, 2)}:${pad(seconds, 2)}.${milliseconds}`;
-  return strTime;
-};
-
-const subTimeToVideoTime = (subTime: string) => {
-  const parts = subTime.split(':');
-  const hoursAsSeconds = parseFloat(parts[0]) * 60 * 60;
-  const minutesAsSeconds = parseFloat(parts[1]) * 60;
-  const seconds = parseFloat(parts[2]);
-  return hoursAsSeconds + minutesAsSeconds + seconds;
-};
-
-const subStringToTrackData = (sub: string): ITrackData => {
-  const decodedSub = base64.decode(sub);
-  const subArray = decodedSub.split('\n\n');
-  if (subArray[0] !== 'WEBVTT') {
-    throw new Error('wtf boi');
-  }
-  const subLines = subArray.slice(1);
-  return subLines.map(line => {
-    const subPartStrings = line.split('\n');
-    const subParts = subPartStrings[0].includes(':') ? subPartStrings : subPartStrings.slice(1);
-    const [startTime, endTime] = subParts[0].split(' --> ').map(subTimeToVideoTime);
-    const text = subParts.slice(1).join('\n');
-    return { startTime, endTime, text };
-  });
-};
-
-const View: React.FC = () => {
+const View: NextPage = () => {
   const { query } = useRouter();
   const [time, setTime] = useState(0);
-  // const [subTrack, setSubTrack] = useState<ITrackData>([]);
+  const [subTrackState, setSubTrackState] = useState<ITrackRow[]>([]);
+  const [subText, setSubText] = useState('');
 
   const { clip, sub } = query;
-  const subSource = sub ? `data:text/vtt;charset=utf-8;base64,${sub}` : '';
+  const subSource = subText ? `data:text/vtt;charset=utf-8;base64,${subText}` : '';
   const videoSource = clip ? `/static/clips/${clip}.mp4` : '';
   const videoElement = useRef<HTMLVideoElement>(null);
 
-  if (typeof sub === 'string') console.log(subStringToTrackData(sub));
-
   // Refresh the video as SSR version gets undefined clip name
+  useEffect(() => (videoElement.current as HTMLVideoElement).load(), [videoElement]);
+
+  // Refresh subTrack state after async load of query param
   useEffect(() => {
-    const timer = setTimeout(() => {
-      (videoElement.current as HTMLVideoElement).load();
-    }, 100);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [videoSource]);
+    if (typeof sub === 'string') setSubTrackState(subStringToTrackData(sub));
+  }, [sub]);
+
+  // Keep subString up to date with changes to subTrack
+  useEffect(() => {
+    const subString = trackDataToSubString(subTrackState);
+    setSubText(subString);
+  }, [subTrackState]);
+
+  /** Updates the internal data structure containing the rows of sub texts */
+  const trackRowOnChange = (rowIndex: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Get updated value
+    const currentTrack = subTrackState[rowIndex];
+    const target = e.currentTarget.name;
+    const value =
+      e.currentTarget.type === 'number' ? parseFloat(e.currentTarget.value) : e.currentTarget.value;
+    // Update track object
+    const updatedTrack = { ...currentTrack, [target]: value };
+    // Replace old one in state
+    const updatedRows = subTrackState.map((row, i) => (i === rowIndex ? updatedTrack : row));
+    setSubTrackState(updatedRows);
+  };
 
   const getTimestamp = () => {
     if (videoElement.current) setTime(videoElement.current.currentTime);
+  };
+
+  /** Adds a new row after the current last one */
+  const addRow = () => {
+    const lastRow = subTrackState[subTrackState.length - 1];
+    const newRow: ITrackRow = {
+      id: `${lastRow.endTime + 0.001}id`,
+      startTime: lastRow.endTime + 0.001,
+      endTime: lastRow.endTime + 1,
+      text: '',
+    };
+    setSubTrackState([...subTrackState, newRow]);
+  };
+
+  /** Deletes a row */
+  const deleteRow = (rowIndex: number) => () => {
+    setSubTrackState(subTrackState.filter((_, i) => i !== rowIndex));
   };
 
   return (
@@ -90,6 +88,19 @@ const View: React.FC = () => {
         <source src={videoSource} type="video/mp4" />
         <track label="English" kind="subtitles" src={subSource} default />
       </video>
+      <ol>
+        {subTrackState.map((row, i) => (
+          <TrackInput
+            row={row}
+            onChange={trackRowOnChange(i)}
+            deleteCallback={deleteRow(i)}
+            key={row.id}
+          />
+        ))}
+      </ol>
+      <button type="button" onClick={addRow}>
+        Add row
+      </button>
     </>
   );
 };
