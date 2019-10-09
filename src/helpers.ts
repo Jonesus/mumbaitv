@@ -33,6 +33,7 @@ export const subStringToTrackData = (sub: string): ITrackRow[] => {
   if (subArray[0] !== 'WEBVTT') {
     throw new Error('wtf boi');
   }
+  if (subArray.length === 2 && subArray[1] === '') return [];
   const subLines = subArray.slice(1);
   return subLines.map(line => {
     const subPartStrings = line.split('\n');
