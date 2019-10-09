@@ -3,15 +3,24 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
-import { TrackInput } from 'src/components/TrackInput';
 import { ITrackRow, subStringToTrackData, trackDataToSubString, CLIPS_URL } from 'src/helpers';
+
+import { TrackInput } from 'src/components/TrackInput';
+import { MainContainer } from 'src/components/MainContainer';
 
 const H1 = styled.h1`
   font-size: 3rem;
 `;
 
+const Video = styled.video`
+  width: 100%;
+`;
+
 const View: NextPage = () => {
   const { query, route, asPath, replace } = useRouter();
+  const [editing, setEditing] = useState(false);
+  const toggleEditing = () => setEditing(!editing);
+
   const [time, setTime] = useState(0);
   const [subTrackState, setSubTrackState] = useState<ITrackRow[]>([]);
   const [subText, setSubText] = useState('');
@@ -99,31 +108,37 @@ const View: NextPage = () => {
   };
 
   return (
-    <>
-      <H1>Edit a video</H1>
-      <p>Go edit now pls</p>
-      <video controls ref={videoElement}>
+    <MainContainer>
+      {editing ? <H1>Edit a video</H1> : <H1>Mumbai TV Theater</H1>}
+      <Video controls ref={videoElement}>
         <source src={videoSource} type="video/mp4" />
         <track label="English" kind="subtitles" src={subSource} default />
-      </video>
-      <p>{time}</p>
-      <button type="button" onClick={getTimestamp}>
-        Get timestamp
+      </Video>
+      <button type="button" onClick={toggleEditing}>
+        Edit this video!
       </button>
-      <ol>
-        {subTrackState.map((row, i) => (
-          <TrackInput
-            row={row}
-            onChange={trackRowOnChange(i)}
-            deleteCallback={deleteRow(i)}
-            key={row.id}
-          />
-        ))}
-      </ol>
-      <button type="button" onClick={addRow}>
-        Add row
-      </button>
-    </>
+      {editing && (
+        <>
+          <p>{time}</p>
+          <button type="button" onClick={getTimestamp}>
+            Get timestamp
+          </button>
+          <ol>
+            {subTrackState.map((row, i) => (
+              <TrackInput
+                row={row}
+                onChange={trackRowOnChange(i)}
+                deleteCallback={deleteRow(i)}
+                key={row.id}
+              />
+            ))}
+          </ol>
+          <button type="button" onClick={addRow}>
+            Add row
+          </button>
+        </>
+      )}
+    </MainContainer>
   );
 };
 
