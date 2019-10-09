@@ -23,7 +23,14 @@ const View: NextPage = () => {
   const videoElement = useRef<HTMLVideoElement>(null);
 
   // Refresh the video as SSR version gets undefined clip name
-  useEffect(() => (videoElement.current as HTMLVideoElement).load(), [videoElement, clip]);
+  useEffect(() => {
+    const video = videoElement.current as HTMLVideoElement;
+    video.load();
+    setTimeout(() => {
+      video.textTracks[0].mode = 'hidden';
+      video.textTracks[0].mode = 'showing';
+    }, 50);
+  }, [videoElement, clip]);
 
   // Refresh subTrack state after async load of query param
   useEffect(() => {
