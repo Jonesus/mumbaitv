@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 import { TrackInput } from 'src/components/TrackInput';
-import { ITrackRow, subStringToTrackData, trackDataToSubString } from 'src/helpers';
+import { ITrackRow, subStringToTrackData, trackDataToSubString, CLIPS_URL } from 'src/helpers';
 
 const H1 = styled.h1`
   font-size: 3rem;
@@ -19,7 +19,7 @@ const View: NextPage = () => {
 
   const { clip, sub } = query;
   const subSource = subText ? `data:text/vtt;charset=utf-8;base64,${subText}` : '';
-  const videoSource = clip ? `/static/clips/${clip}.mp4` : '';
+  const videoSource = clip ? `${CLIPS_URL}${clip}` : '';
   const videoElement = useRef<HTMLVideoElement>(null);
 
   // Refresh the video as SSR version gets undefined clip name
