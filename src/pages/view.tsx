@@ -29,7 +29,7 @@ const View: NextPage = () => {
   useEffect(() => {
     if (!initialLoad && typeof sub === 'string' && sub !== '') {
       setInitialLoad(true);
-      setSubTrackState(subStringToTrackData(sub.replace(' ', '+')));
+      setSubTrackState(subStringToTrackData(sub.replace(/ /g, '+')));
     }
   }, [sub]); // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import styled from 'styled-components';
+import { CLIPS_URL } from 'src/helpers';
 
 const H1 = styled.h1`
   font-size: 3rem;
 `;
-
-const CLIPS_URL = 'https://inkubaattori.aalto.fi/mumbaitv/';
 
 const Home: NextPage = () => {
   const [clips, setClips] = useState<string[]>([]);
