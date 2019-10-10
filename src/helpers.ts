@@ -1,4 +1,4 @@
-import base64 from 'base-64';
+import { Base64 } from 'js-base64';
 
 export const CLIPS_URL = 'https://inkubaattori.aalto.fi/mumbaitv/';
 
@@ -30,7 +30,7 @@ export const subTimeToVideoTime = (subTime: string) => {
 };
 
 export const subStringToTrackData = (sub: string): ITrackRow[] => {
-  const decodedSub = base64.decode(sub);
+  const decodedSub = Base64.decode(sub);
   const subArray = decodedSub.split('\n\n');
   if (subArray[0] !== 'WEBVTT') {
     throw new Error('wtf boi');
@@ -51,5 +51,5 @@ export const trackDataToSubString = (track: ITrackRow[]): string => {
     row =>
       `${videoTimeToSubTime(row.startTime)} --> ${videoTimeToSubTime(row.endTime)}\n${row.text}`,
   );
-  return base64.encode(`WEBVTT\n\n${rowStrings.join('\n\n')}`);
+  return Base64.encode(`WEBVTT\n\n${rowStrings.join('\n\n')}`);
 };
