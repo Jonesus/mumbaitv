@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "name": "mumbaitv",
+  "env": {
+    "MONGODB_URI": "@db_uri"
+  }
+}
