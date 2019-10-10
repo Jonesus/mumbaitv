@@ -7,6 +7,7 @@ import { ITrackRow, subStringToTrackData, trackDataToSubString, CLIPS_URL } from
 
 import { TrackInput } from 'src/components/TrackInput';
 import { MainContainer } from 'src/components/MainContainer';
+import { IShortUrl } from 'src/models';
 
 const H1 = styled.h1`
   font-size: 3rem;
@@ -30,6 +31,8 @@ const View: NextPage = () => {
   const subSource = subText ? `data:text/vtt;charset=utf-8;base64,${subText}` : '';
   const videoSource = clip ? `${CLIPS_URL}${clip}` : '';
   const videoElement = useRef<HTMLVideoElement>(null);
+
+  const [publishedUrl, setPublishedUrl] = useState('');
 
   // Refresh the video as SSR version gets undefined clip name
   useEffect(() => {
@@ -107,6 +110,23 @@ const View: NextPage = () => {
     setSubTrackState(subTrackState.filter((_, i) => i !== rowIndex));
   };
 
+  const publish = async () => {
+    const resp = await fetch('/api/shorten', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ long: asPath }),
+    });
+    const data: IShortUrl = await resp.json();
+    setPublishedUrl(`${window.location.origin}/s/${data.short}`);
+  };
+
+  const copyToClipboard = () => {
+    const copyText = document.getElementById('publishedUrl') as HTMLInputElement;
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); // For mobile devices
+    document.execCommand('copy');
+  };
+
   return (
     <MainContainer>
       {editing ? <H1>Edit a video</H1> : <H1>Mumbai TV Theater</H1>}
@@ -119,6 +139,17 @@ const View: NextPage = () => {
       </button>
       {editing && (
         <>
+          <button type="button" onClick={publish}>
+            Publish!
+          </button>
+          {publishedUrl !== '' && (
+            <>
+              <input type="text" value={publishedUrl} readOnly id="publishedUrl" />
+              <button type="button" onClick={copyToClipboard}>
+                copy to clipboard
+              </button>
+            </>
+          )}
           <p>{time}</p>
           <button type="button" onClick={getTimestamp}>
             Get timestamp

@@ -9,7 +9,6 @@ import { MainContainer } from 'src/components/MainContainer';
 
 const H1 = styled.h1`
   font-size: 3rem;
-  width: 60rem;
 `;
 
 const LinkGrid = styled.ul`
