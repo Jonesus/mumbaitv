@@ -6,10 +6,7 @@ import styled from 'styled-components';
 import { CLIPS_URL } from 'src/helpers';
 
 import { MainContainer } from 'src/components/MainContainer';
-
-const H1 = styled.h1`
-  font-size: 3rem;
-`;
+import { H1 } from 'src/components/Simple';
 
 const LinkGrid = styled.ul`
   display: grid;

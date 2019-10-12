@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import styled from 'styled-components';
 
 import { ITrackRow, subStringToTrackData, trackDataToSubString, CLIPS_URL } from 'src/helpers';
 
@@ -9,13 +8,7 @@ import { TrackInput } from 'src/components/TrackInput';
 import { MainContainer } from 'src/components/MainContainer';
 import { IShortUrl } from 'src/models';
 
-const H1 = styled.h1`
-  font-size: 3rem;
-`;
-
-const Video = styled.video`
-  width: 100%;
-`;
+import { H1, Video, Button } from 'src/components/Simple';
 
 const View: NextPage = () => {
   const { query, route, asPath, replace } = useRouter();
@@ -134,9 +127,9 @@ const View: NextPage = () => {
         <source src={videoSource} type="video/mp4" />
         <track label="English" kind="subtitles" src={subSource} default />
       </Video>
-      <button type="button" onClick={toggleEditing}>
+      <Button filled onClick={toggleEditing}>
         Edit this video!
-      </button>
+      </Button>
       {editing && (
         <>
           <button type="button" onClick={publish}>
