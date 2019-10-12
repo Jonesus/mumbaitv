@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import { ITrackRow } from 'src/helpers';
 
 interface ITrackInput {
@@ -7,8 +8,24 @@ interface ITrackInput {
   deleteCallback: () => void;
 }
 
+export const TrackRows = styled.ol`
+  padding: 0 var(--decoration-pad);
+`;
+
+const Row = styled.li`
+  list-style: none;
+  padding: 0.5em;
+  border-radius: var(--decoration-radius-base);
+  border: 1px solid var(--secondary-300);
+
+  background-color: var(--secondary-100);
+  & + & {
+    margin-top: 1em;
+  }
+`;
+
 export const TrackInput: React.FC<ITrackInput> = ({ row, onChange, deleteCallback }) => (
-  <li>
+  <Row>
     start
     <input
       name="startTime"
@@ -32,5 +49,5 @@ export const TrackInput: React.FC<ITrackInput> = ({ row, onChange, deleteCallbac
     <button type="button" onClick={deleteCallback}>
       delete
     </button>
-  </li>
+  </Row>
 );

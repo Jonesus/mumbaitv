@@ -4,15 +4,15 @@ import { useRouter } from 'next/router';
 
 import { ITrackRow, subStringToTrackData, trackDataToSubString, CLIPS_URL } from 'src/helpers';
 
-import { TrackInput } from 'src/components/TrackInput';
+import { TrackInput, TrackRows } from 'src/components/TrackInput';
 import { MainContainer } from 'src/components/MainContainer';
 import { IShortUrl } from 'src/models';
 
-import { H1, Video, Button } from 'src/components/Simple';
+import { H1, Video, Button, EditButtonContainer, EditorContainer } from 'src/components/Simple';
 
 const View: NextPage = () => {
   const { query, route, asPath, replace } = useRouter();
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(true);
   const toggleEditing = () => setEditing(!editing);
 
   const [time, setTime] = useState(0);
@@ -122,16 +122,13 @@ const View: NextPage = () => {
 
   return (
     <MainContainer>
-      {editing ? <H1>Edit a video</H1> : <H1>Mumbai TV Theater</H1>}
+      <H1>Mumbai TV {editing ? 'Editor' : 'Theater'}</H1>
       <Video controls ref={videoElement}>
         <source src={videoSource} type="video/mp4" />
         <track label="English" kind="subtitles" src={subSource} default />
       </Video>
-      <Button filled onClick={toggleEditing}>
-        Edit this video!
-      </Button>
       {editing && (
-        <>
+        <EditorContainer>
           <button type="button" onClick={publish}>
             Publish!
           </button>
@@ -147,7 +144,7 @@ const View: NextPage = () => {
           <button type="button" onClick={getTimestamp}>
             Get timestamp
           </button>
-          <ol>
+          <TrackRows>
             {subTrackState.map((row, i) => (
               <TrackInput
                 row={row}
@@ -156,12 +153,17 @@ const View: NextPage = () => {
                 key={row.id}
               />
             ))}
-          </ol>
+          </TrackRows>
           <button type="button" onClick={addRow}>
             Add row
           </button>
-        </>
+        </EditorContainer>
       )}
+      <EditButtonContainer>
+        <Button filled onClick={toggleEditing}>
+          {editing ? 'Close editor' : 'Edit this video!'}
+        </Button>
+      </EditButtonContainer>
     </MainContainer>
   );
 };
