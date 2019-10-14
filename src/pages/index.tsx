@@ -44,6 +44,12 @@ const IntroText = styled.p`
   background-color: var(--white);
   padding: 1em 1.5em;
   margin-bottom: 0;
+  @media only screen and (max-width: 36em) {
+    font-size: 1em;
+  }
+  @media only screen and (max-width: 24em) {
+    font-size: 0.8em;
+  }
 `;
 
 const Home: NextPage = () => {
