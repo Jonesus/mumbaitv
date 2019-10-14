@@ -23,7 +23,7 @@ import {
 import { FiArrowLeft } from 'react-icons/fi';
 
 const View: NextPage = () => {
-  const { query, route, asPath, replace, back } = useRouter();
+  const { query, route, asPath, replace, push } = useRouter();
   const [editing, setEditing] = useState(false);
   const toggleEditing = () => setEditing(!editing);
 
@@ -149,7 +149,7 @@ const View: NextPage = () => {
   return (
     <>
       <BackWrapper>
-        <BackButton title="Go back" onClick={back}>
+        <BackButton title="Go back" onClick={() => push('/')}>
           <FiArrowLeft />
         </BackButton>
       </BackWrapper>
