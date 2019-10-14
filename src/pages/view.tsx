@@ -8,24 +8,31 @@ import { TrackInput, TrackRows } from 'src/components/TrackInput';
 import { MainContainer } from 'src/components/MainContainer';
 import { IShortUrl } from 'src/models';
 
-import { H1, Video, Button, EditButtonContainer, EditorContainer } from 'src/components/Simple';
+import {
+  H1,
+  Video,
+  Button,
+  OrangeButton,
+  OutlineButton,
+  EditButtonContainer,
+  EditorContainer,
+  PublishedLink,
+} from 'src/components/Simple';
 
 const View: NextPage = () => {
   const { query, route, asPath, replace } = useRouter();
-  const [editing, setEditing] = useState(true);
+  const [editing, setEditing] = useState(false);
   const toggleEditing = () => setEditing(!editing);
 
-  const [time, setTime] = useState(0);
   const [subTrackState, setSubTrackState] = useState<ITrackRow[]>([]);
   const [subText, setSubText] = useState('');
   const [initialLoad, setInitialLoad] = useState(false);
+  const [publishedUrl, setPublishedUrl] = useState('');
 
-  const { clip, sub } = query;
+  const { clip, sub, short } = query;
   const subSource = subText ? `data:text/vtt;charset=utf-8;base64,${subText}` : '';
   const videoSource = clip ? `${CLIPS_URL}${clip}` : '';
   const videoElement = useRef<HTMLVideoElement>(null);
-
-  const [publishedUrl, setPublishedUrl] = useState('');
 
   // Refresh the video as SSR version gets undefined clip name
   useEffect(() => {
@@ -55,6 +62,7 @@ const View: NextPage = () => {
       setSubText(subString);
       const newRoute = `${route}?clip=${clip}&sub=${subString}`;
       if (asPath !== newRoute) replace(newRoute);
+      if (short) setPublishedUrl(`${window.location.origin}/s/${short}`);
     }
   }, [subTrackState]); // eslint-disable-line
 
@@ -82,10 +90,6 @@ const View: NextPage = () => {
     setSubTrackState(updatedRows);
   };
 
-  const getTimestamp = () => {
-    if (videoElement.current) setTime(videoElement.current.currentTime);
-  };
-
   /** Adds a new row after the current last one */
   const addRow = () => {
     const lastRow = subTrackState[subTrackState.length - 1];
@@ -103,6 +107,28 @@ const View: NextPage = () => {
     setSubTrackState(subTrackState.filter((_, i) => i !== rowIndex));
   };
 
+  /** Callback to be fed into TrackRows */
+  const setCurrentAsRowTime = (rowIndex: number, fieldName: 'startTime' | 'endTime') => () => {
+    setSubTrackState(
+      subTrackState.map((row, i) => {
+        if (i === rowIndex && videoElement.current) {
+          return { ...row, [fieldName]: videoElement.current.currentTime };
+        }
+        return row;
+      }),
+    );
+  };
+
+  /** Callback to be fed into TrackRows */
+  const setRowTimeAsCurrent = (rowIndex: number, fieldName: 'startTime' | 'endTime') => () => {
+    subTrackState.forEach((row, i) => {
+      if (i === rowIndex && videoElement.current) {
+        videoElement.current.currentTime = row[fieldName];
+      }
+    });
+  };
+
+  /** Gets a short url from api */
   const publish = async () => {
     const resp = await fetch('/api/shorten', {
       method: 'POST',
@@ -111,13 +137,7 @@ const View: NextPage = () => {
     });
     const data: IShortUrl = await resp.json();
     setPublishedUrl(`${window.location.origin}/s/${data.short}`);
-  };
-
-  const copyToClipboard = () => {
-    const copyText = document.getElementById('publishedUrl') as HTMLInputElement;
-    copyText.select();
-    copyText.setSelectionRange(0, 99999); // For mobile devices
-    document.execCommand('copy');
+    setEditing(false);
   };
 
   return (
@@ -127,42 +147,37 @@ const View: NextPage = () => {
         <source src={videoSource} type="video/mp4" />
         <track label="English" kind="subtitles" src={subSource} default />
       </Video>
+      <PublishedLink value={publishedUrl} />
       {editing && (
         <EditorContainer>
-          <button type="button" onClick={publish}>
-            Publish!
-          </button>
-          {publishedUrl !== '' && (
-            <>
-              <input type="text" value={publishedUrl} readOnly id="publishedUrl" />
-              <button type="button" onClick={copyToClipboard}>
-                copy to clipboard
-              </button>
-            </>
-          )}
-          <p>{time}</p>
-          <button type="button" onClick={getTimestamp}>
-            Get timestamp
-          </button>
           <TrackRows>
             {subTrackState.map((row, i) => (
               <TrackInput
                 row={row}
                 onChange={trackRowOnChange(i)}
                 deleteCallback={deleteRow(i)}
+                startAsCurrent={setRowTimeAsCurrent(i, 'startTime')}
+                endAsCurrent={setRowTimeAsCurrent(i, 'endTime')}
+                currentAsStart={setCurrentAsRowTime(i, 'startTime')}
+                currentAsEnd={setCurrentAsRowTime(i, 'endTime')}
                 key={row.id}
               />
             ))}
           </TrackRows>
-          <button type="button" onClick={addRow}>
+          <Button onClick={addRow} style={{ float: 'left' }}>
             Add row
-          </button>
+          </Button>
+          <OrangeButton onClick={publish} style={{ float: 'right' }}>
+            Publish!
+          </OrangeButton>
         </EditorContainer>
       )}
       <EditButtonContainer>
-        <Button filled onClick={toggleEditing}>
-          {editing ? 'Close editor' : 'Edit this video!'}
-        </Button>
+        {editing ? (
+          <OutlineButton onClick={toggleEditing}>Close editor</OutlineButton>
+        ) : (
+          <Button onClick={toggleEditing}>Edit this video!</Button>
+        )}
       </EditButtonContainer>
     </MainContainer>
   );

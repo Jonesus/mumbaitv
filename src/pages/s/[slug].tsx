@@ -13,11 +13,11 @@ ShortUrlPage.getInitialProps = async ({ res, query }) => {
 
   if (res) {
     res.writeHead(302, {
-      Location: `${long}`,
+      Location: `${long}&short=${slug}`,
     });
     res.end();
   } else {
-    Router.push(`${long}`);
+    Router.push(`${long}&short=${slug}`);
   }
 
   return {};
