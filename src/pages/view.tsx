@@ -52,22 +52,10 @@ const View: NextPage = () => {
     if (!initialLoad && typeof sub === 'string' && sub !== '') {
       setInitialLoad(true);
       setSubTrackState(subStringToTrackData(sub.replace(/ /g, '+')));
-    }
-  }, [sub]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Keep subString and URL up to date with changes to subTrack
-  useEffect(() => {
-    if (!initialLoad && typeof clip === 'string') {
-      setInitialLoad(true);
-    }
-    if (initialLoad && clip !== '') {
-      const subString = trackDataToSubString(subTrackState);
-      setSubText(subString);
-      const newRoute = `${route}?clip=${clip}&sub=${subString}`;
-      if (asPath !== newRoute) replace(newRoute);
+      setSubText(sub.replace(/ /g, '+'));
       if (short) setPublishedUrl(`${window.location.origin}/s/${short}`);
     }
-  }, [subTrackState]); // eslint-disable-line
+  }, [sub]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /** Updates the internal data structure containing the rows of sub texts */
   const trackRowOnChange = (rowIndex: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,7 +69,16 @@ const View: NextPage = () => {
     const updatedTrack = { ...currentTrack, [target]: value };
     // Replace old one in state
     const updatedRows = subTrackState.map((row, i) => (i === rowIndex ? updatedTrack : row));
+    const subString = trackDataToSubString(updatedRows);
+    setSubText(subString);
     setSubTrackState(updatedRows);
+  };
+
+  /** Update url bar whenever an input loses focus */
+  const onBlur = () => {
+    const subString = trackDataToSubString(subTrackState);
+    const newRoute = `${route}?clip=${clip}&sub=${subString}`;
+    if (asPath !== newRoute) replace(newRoute);
   };
 
   /** Reorder track rows whenever startTime gets changed */
@@ -96,6 +93,7 @@ const View: NextPage = () => {
       updatedRows.sort((a, b) => a.startTime - b.startTime);
       setSubTrackState(updatedRows);
     }
+    onBlur();
   };
 
   /** Adds a new row after the current last one */
@@ -169,6 +167,7 @@ const View: NextPage = () => {
                 <TrackInput
                   row={row}
                   onChange={trackRowOnChange(i)}
+                  onBlur={onBlur}
                   reorderCallback={reorderIfNeeded(i)}
                   deleteCallback={deleteRow(i)}
                   startAsCurrent={setRowTimeAsCurrent(i, 'startTime')}

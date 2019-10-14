@@ -99,6 +99,7 @@ const TextWrapper = styled.div`
 interface ITrackInput {
   row: ITrackRow;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur: () => void;
   reorderCallback: () => void;
   deleteCallback: () => void;
   startAsCurrent: () => void;
@@ -110,6 +111,7 @@ interface ITrackInput {
 export const TrackInput: React.FC<ITrackInput> = ({
   row,
   onChange,
+  onBlur,
   reorderCallback,
   deleteCallback,
   startAsCurrent,
@@ -148,6 +150,7 @@ export const TrackInput: React.FC<ITrackInput> = ({
           name="endTime"
           type="number"
           onChange={onChange}
+          onBlur={onBlur}
           step="any"
           size={6}
           value={row.endTime}
@@ -166,7 +169,7 @@ export const TrackInput: React.FC<ITrackInput> = ({
 
     <TextWrapper>
       <LabelText>Text</LabelText>
-      <TextInput name="text" type="text" onChange={onChange} value={row.text} />
+      <TextInput name="text" type="text" onChange={onChange} onBlur={onBlur} value={row.text} />
       <IconButton onClick={deleteCallback} title="Delete this row">
         <FiXCircle />
       </IconButton>
