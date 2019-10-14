@@ -118,7 +118,7 @@ const View: NextPage = () => {
     setSubTrackState(
       subTrackState.map((row, i) => {
         if (i === rowIndex && videoElement.current) {
-          return { ...row, [fieldName]: videoElement.current.currentTime };
+          return { ...row, [fieldName]: parseFloat(videoElement.current.currentTime.toFixed(3)) };
         }
         return row;
       }),
