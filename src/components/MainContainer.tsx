@@ -95,7 +95,6 @@ const GlobalStyles = createGlobalStyle`
 
 const Main = styled.main`
   display: grid;
-  place-content: center;
   margin: auto;
 
   background-color: var(--main-100);

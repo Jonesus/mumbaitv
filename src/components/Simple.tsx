@@ -16,7 +16,7 @@ export const H1 = styled.h1`
   text-shadow: 0.04em 0.04em 0.04em var(--grey-300);
 
   @media only screen and (max-width: 36em) {
-    font-size: 1.9rem;
+    font-size: 1.8rem;
   }
 `;
 
@@ -77,6 +77,34 @@ export const OutlineButton = styled(BaseButton)`
   &:hover {
     color: var(--secondary-600);
     background-color: var(--white);
+  }
+`;
+
+export const BackWrapper = styled.div`
+  height: 0;
+`;
+
+export const BackButton = styled(BaseButton)`
+  position: relative;
+  top: -1em;
+  left: -1em;
+  border-radius: calc(var(--decoration-radius-base) * 2);
+  width: 2em;
+  height: 2em;
+  background-color: var(--white);
+  color: var(--secondary-900);
+  transition: all 300ms ease-in-out;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  &:hover {
+    opacity: 1;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  }
+  @media only screen and (min-width: 54em) {
+    font-size: 1.5em;
+  }
+  @media only screen and (max-width: 24em) {
+    top: -0.5em;
+    left: -0.5em;
   }
 `;
 

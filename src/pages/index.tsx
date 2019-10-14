@@ -18,6 +18,12 @@ const LinkGrid = styled.ul`
 const GridItem = styled.li`
   list-style: none;
   overflow: hidden;
+  border-radius: var(--decoration-radius-base);
+  cursor: pointer;
+  transition: all 300ms ease-in-out;
+  &:hover {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  }
 `;
 
 const StretchContainer = styled.a`
@@ -30,6 +36,14 @@ const ImageLink = styled.img`
   object-fit: cover;
   height: auto;
   width: 100%;
+`;
+
+const IntroText = styled.p`
+  font-size: 1.2em;
+  border-radius: var(--decoration-radius-base);
+  background-color: var(--white);
+  padding: 1em 1.5em;
+  margin-bottom: 0;
 `;
 
 const Home: NextPage = () => {
@@ -48,7 +62,11 @@ const Home: NextPage = () => {
   return (
     <MainContainer>
       <H1>Mumbai TV</H1>
-      <p>Pick a nice video and then go to town subtitling it</p>
+      <IntroText>
+        Mumbai TV is a humorous video subtitling platform where you can show all your friends how
+        funny you think you are. A curated collection of crème de la crème Bollywood clips are
+        available as your expression vessel of choice. Pick one below to get started:
+      </IntroText>
       <LinkGrid>
         {clips.map(clip => {
           const videoLink = `/view?clip=${clip}`;

@@ -12,15 +12,18 @@ import {
   H1,
   Video,
   Button,
+  BackButton,
   OrangeButton,
   OutlineButton,
   EditButtonContainer,
   EditorContainer,
   PublishedLink,
+  BackWrapper,
 } from 'src/components/Simple';
+import { FiArrowLeft } from 'react-icons/fi';
 
 const View: NextPage = () => {
-  const { query, route, asPath, replace } = useRouter();
+  const { query, route, asPath, replace, back } = useRouter();
   const [editing, setEditing] = useState(false);
   const toggleEditing = () => setEditing(!editing);
 
@@ -68,6 +71,7 @@ const View: NextPage = () => {
 
   /** Updates the internal data structure containing the rows of sub texts */
   const trackRowOnChange = (rowIndex: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (publishedUrl !== '') setPublishedUrl('');
     // Get updated value
     const currentTrack = subTrackState[rowIndex];
     const target = e.currentTarget.name;
@@ -77,17 +81,21 @@ const View: NextPage = () => {
     const updatedTrack = { ...currentTrack, [target]: value };
     // Replace old one in state
     const updatedRows = subTrackState.map((row, i) => (i === rowIndex ? updatedTrack : row));
-    if (target === 'startTime') {
-      // Possible need to reorder tracks
-      if (
-        (rowIndex > 0 && updatedTrack.startTime < updatedRows[rowIndex - 1].startTime) ||
-        (rowIndex < updatedRows.length - 1 &&
-          updatedTrack.startTime > updatedRows[rowIndex + 1].startTime)
-      ) {
-        updatedRows.sort((a, b) => a.startTime - b.startTime);
-      }
-    }
     setSubTrackState(updatedRows);
+  };
+
+  /** Reorder track rows whenever startTime gets changed */
+  const reorderIfNeeded = (rowIndex: number) => () => {
+    const currentTrack = subTrackState[rowIndex];
+    const updatedRows = [...subTrackState];
+    if (
+      (rowIndex > 0 && currentTrack.startTime < updatedRows[rowIndex - 1].startTime) ||
+      (rowIndex < updatedRows.length - 1 &&
+        currentTrack.startTime > updatedRows[rowIndex + 1].startTime)
+    ) {
+      updatedRows.sort((a, b) => a.startTime - b.startTime);
+      setSubTrackState(updatedRows);
+    }
   };
 
   /** Adds a new row after the current last one */
@@ -141,45 +149,53 @@ const View: NextPage = () => {
   };
 
   return (
-    <MainContainer>
-      <H1>Mumbai TV {editing ? 'Editor' : 'Theater'}</H1>
-      <Video controls ref={videoElement}>
-        <source src={videoSource} type="video/mp4" />
-        <track label="English" kind="subtitles" src={subSource} default />
-      </Video>
-      <PublishedLink value={publishedUrl} />
-      {editing && (
-        <EditorContainer>
-          <TrackRows>
-            {subTrackState.map((row, i) => (
-              <TrackInput
-                row={row}
-                onChange={trackRowOnChange(i)}
-                deleteCallback={deleteRow(i)}
-                startAsCurrent={setRowTimeAsCurrent(i, 'startTime')}
-                endAsCurrent={setRowTimeAsCurrent(i, 'endTime')}
-                currentAsStart={setCurrentAsRowTime(i, 'startTime')}
-                currentAsEnd={setCurrentAsRowTime(i, 'endTime')}
-                key={row.id}
-              />
-            ))}
-          </TrackRows>
-          <Button onClick={addRow} style={{ float: 'left' }}>
-            Add row
-          </Button>
-          <OrangeButton onClick={publish} style={{ float: 'right' }}>
-            Publish!
-          </OrangeButton>
-        </EditorContainer>
-      )}
-      <EditButtonContainer>
-        {editing ? (
-          <OutlineButton onClick={toggleEditing}>Close editor</OutlineButton>
-        ) : (
-          <Button onClick={toggleEditing}>Edit this video!</Button>
+    <>
+      <BackWrapper>
+        <BackButton title="Go back" onClick={back}>
+          <FiArrowLeft />
+        </BackButton>
+      </BackWrapper>
+      <MainContainer>
+        <H1>Mumbai TV {editing ? 'Editor' : 'Theater'}</H1>
+        <Video controls ref={videoElement}>
+          <source src={videoSource} type="video/mp4" />
+          <track label="English" kind="subtitles" src={subSource} default />
+        </Video>
+        <PublishedLink value={publishedUrl} />
+        {editing && (
+          <EditorContainer>
+            <TrackRows>
+              {subTrackState.map((row, i) => (
+                <TrackInput
+                  row={row}
+                  onChange={trackRowOnChange(i)}
+                  reorderCallback={reorderIfNeeded(i)}
+                  deleteCallback={deleteRow(i)}
+                  startAsCurrent={setRowTimeAsCurrent(i, 'startTime')}
+                  endAsCurrent={setRowTimeAsCurrent(i, 'endTime')}
+                  currentAsStart={setCurrentAsRowTime(i, 'startTime')}
+                  currentAsEnd={setCurrentAsRowTime(i, 'endTime')}
+                  key={row.id}
+                />
+              ))}
+            </TrackRows>
+            <Button onClick={addRow} style={{ float: 'left' }}>
+              Add row
+            </Button>
+            <OrangeButton onClick={publish} style={{ float: 'right' }}>
+              Publish!
+            </OrangeButton>
+          </EditorContainer>
         )}
-      </EditButtonContainer>
-    </MainContainer>
+        <EditButtonContainer>
+          {editing ? (
+            <OutlineButton onClick={toggleEditing}>Close editor</OutlineButton>
+          ) : (
+            <Button onClick={toggleEditing}>Edit this video!</Button>
+          )}
+        </EditButtonContainer>
+      </MainContainer>
+    </>
   );
 };
 

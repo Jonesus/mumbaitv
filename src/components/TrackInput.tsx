@@ -99,6 +99,7 @@ const TextWrapper = styled.div`
 interface ITrackInput {
   row: ITrackRow;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  reorderCallback: () => void;
   deleteCallback: () => void;
   startAsCurrent: () => void;
   endAsCurrent: () => void;
@@ -109,6 +110,7 @@ interface ITrackInput {
 export const TrackInput: React.FC<ITrackInput> = ({
   row,
   onChange,
+  reorderCallback,
   deleteCallback,
   startAsCurrent,
   endAsCurrent,
@@ -133,9 +135,10 @@ export const TrackInput: React.FC<ITrackInput> = ({
           name="startTime"
           type="number"
           onChange={onChange}
+          onBlur={reorderCallback}
           step="any"
           size={6}
-          value={row.startTime.toFixed(3)}
+          value={row.startTime}
           start
         />
         <IconWrapper>
@@ -147,7 +150,7 @@ export const TrackInput: React.FC<ITrackInput> = ({
           onChange={onChange}
           step="any"
           size={6}
-          value={row.endTime.toFixed(3)}
+          value={row.endTime}
         />
       </TimeInputWrapper>
 
