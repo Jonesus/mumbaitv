@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FiXCircle, FiChevronsRight, FiDownload, FiUpload } from 'react-icons/fi';
+import { FiXCircle, FiChevronsRight, FiDownload, FiSkipForward, FiSkipBack } from 'react-icons/fi';
 import { ITrackRow } from 'src/helpers';
 import { BaseButton, TextInput } from 'src/components/Simple';
 
@@ -125,7 +125,7 @@ export const TrackInput: React.FC<ITrackInput> = ({
 
       <TimeControls>
         <BaseButton title="Set start time as current time on video" onClick={startAsCurrent}>
-          <FiUpload />
+          <FiSkipBack />
         </BaseButton>
         <BaseButton title="Get current time as start time" onClick={currentAsStart}>
           <FiDownload />
@@ -159,7 +159,7 @@ export const TrackInput: React.FC<ITrackInput> = ({
 
       <TimeControls>
         <BaseButton title="Set end time as current time on video" onClick={endAsCurrent}>
-          <FiUpload />
+          <FiSkipForward />
         </BaseButton>
         <BaseButton title="Get current time as end time" onClick={currentAsEnd}>
           <FiDownload />
