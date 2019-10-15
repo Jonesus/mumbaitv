@@ -1,6 +1,7 @@
 {
   "version": 2,
   "name": "mumbaitv",
+  "alias": "https://mumbaitv.online",
   "env": {
     "MONGODB_URI": "@db_uri"
   }
