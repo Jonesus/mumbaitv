@@ -15,7 +15,13 @@ export const H1 = styled.h1`
   background-color: var(--white);
   text-shadow: 0.04em 0.04em 0.04em var(--grey-300);
 
+  @media only screen and (min-width: 68em) {
+    font-size: 4rem;
+  }
   @media only screen and (max-width: 36em) {
+    font-size: 2.5rem;
+  }
+  @media only screen and (max-width: 24em) {
     font-size: 1.8rem;
   }
 `;

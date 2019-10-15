@@ -70,8 +70,8 @@ const Home: NextPage = () => {
       <H1>Mumbai TV</H1>
       <IntroText>
         Mumbai TV is a humorous video subtitling platform where you can show all your friends how
-        funny you think you are. A curated collection of crème de la crème Bollywood clips are
-        available as your expression vessel of choice. Pick one below to get started:
+        funny you think you are. A curated collection of crème de la crème movie clips are available
+        as your expression vessel of choice. Pick one below to get started:
       </IntroText>
       <LinkGrid>
         {clips.map(clip => {
