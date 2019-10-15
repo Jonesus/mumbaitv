@@ -19,7 +19,7 @@ export const H1 = styled.h1`
     font-size: 4rem;
   }
   @media only screen and (max-width: 36em) {
-    font-size: 2.5rem;
+    font-size: 2.3rem;
   }
   @media only screen and (max-width: 24em) {
     font-size: 1.8rem;
@@ -127,10 +127,12 @@ export const EditorContainer = styled.section`
   padding: var(--decoration-pad);
 `;
 
-export const TextInput = styled.input`
+export const TextInput = styled.textarea.attrs({ rows: 1 })`
   border: none;
   font: inherit;
   background-color: inherit;
+  resize: none;
+  overflow: hidden;
   flex-grow: 1;
   border-radius: 2em;
   padding: 0.3em 1em 0.4em;

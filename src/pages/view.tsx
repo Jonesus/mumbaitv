@@ -58,7 +58,9 @@ const View: NextPage = () => {
   }, [sub]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /** Updates the internal data structure containing the rows of sub texts */
-  const trackRowOnChange = (rowIndex: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const trackRowOnChange = (rowIndex: number) => (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     if (publishedUrl !== '') setPublishedUrl('');
     // Get updated value
     const currentTrack = subTrackState[rowIndex];

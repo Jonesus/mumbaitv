@@ -96,9 +96,17 @@ const TextWrapper = styled.div`
   padding: 0.5em 0;
 `;
 
+const autoHeight = (rowId: string) => () => {
+  const elem = document.getElementById(rowId);
+  if (elem) {
+    elem.style.height = 'auto';
+    elem.style.height = `${elem.scrollHeight}px`;
+  }
+};
+
 interface ITrackInput {
   row: ITrackRow;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onBlur: () => void;
   reorderCallback: () => void;
   deleteCallback: () => void;
@@ -169,7 +177,14 @@ export const TrackInput: React.FC<ITrackInput> = ({
 
     <TextWrapper>
       <LabelText>Text</LabelText>
-      <TextInput name="text" type="text" onChange={onChange} onBlur={onBlur} value={row.text} />
+      <TextInput
+        id={row.id}
+        name="text"
+        onChange={onChange}
+        onBlur={onBlur}
+        onInput={autoHeight(row.id)}
+        value={row.text}
+      />
       <IconButton onClick={deleteCallback} title="Delete this row">
         <FiXCircle />
       </IconButton>
