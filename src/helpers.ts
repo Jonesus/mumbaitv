@@ -1,6 +1,7 @@
 import { Base64 } from 'js-base64';
 
 export const CLIPS_URL = 'https://inkubaattori.aalto.fi/mumbaitv/';
+export const SUBS_URL = 'https://inkubaattori.aalto.fi/mumbaitv/substubs/';
 
 export interface ITrackRow {
   id: string;

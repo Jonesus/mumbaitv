@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import styled from 'styled-components';
 
-import { CLIPS_URL } from 'src/helpers';
+import { CLIPS_URL, SUBS_URL } from 'src/helpers';
 
 import { MainContainer } from 'src/components/MainContainer';
 import { H1 } from 'src/components/Simple';
@@ -54,6 +54,7 @@ const IntroText = styled.p`
 
 const Home: NextPage = () => {
   const [clips, setClips] = useState<string[]>([]);
+  const [subStubs, setSubStubs] = useState<{ [key: string]: string }>({});
 
   const getClips = async () => {
     const response = await fetch(CLIPS_URL);
@@ -61,8 +62,15 @@ const Home: NextPage = () => {
     setClips(data);
   };
 
+  const getInitialSubs = async () => {
+    const response = await fetch(SUBS_URL);
+    const data = await response.json();
+    setSubStubs(data);
+  };
+
   useEffect(() => {
     getClips();
+    getInitialSubs();
   }, []);
 
   return (
@@ -75,10 +83,15 @@ const Home: NextPage = () => {
       </IntroText>
       <LinkGrid>
         {clips.map(clip => {
-          const videoLink = `/view?clip=${clip}`;
+          let subExtension = '';
+          const key = `${clip}.txt`;
+          if (Object.keys(subStubs).includes(key)) {
+            subExtension = `&sub=${subStubs[key]}`;
+          }
+          const videoLink = `/view?clip=${clip}${subExtension}`;
           return (
-            <GridItem>
-              <Link href={videoLink} key={clip}>
+            <GridItem key={clip}>
+              <Link href={videoLink}>
                 <StretchContainer href={videoLink}>
                   <ImageLink src={`${CLIPS_URL}thumbnails/${clip}.jpg`} alt={clip} />
                 </StretchContainer>
