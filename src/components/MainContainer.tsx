@@ -106,9 +106,22 @@ const Main = styled.main`
   }
 `;
 
+const Footer = styled.footer`
+  position: relative;
+  top: 1.2em;
+  height: 0;
+
+  font-size: 0.8em;
+  text-align: center;
+  color: var(--main-500);
+`;
+
 export const MainContainer: React.FC = ({ children }) => (
-  <Main>
-    {children}
-    <GlobalStyles />
-  </Main>
+  <>
+    <Main>
+      {children}
+      <GlobalStyles />
+    </Main>
+    <Footer>Works (best) on Chrome</Footer>
+  </>
 );
