@@ -190,7 +190,7 @@ const View: NextPage = () => {
           {editing ? (
             <OutlineButton onClick={toggleEditing}>Close editor</OutlineButton>
           ) : (
-            <Button onClick={toggleEditing}>Edit this video!</Button>
+            <Button onClick={toggleEditing}>{sub ? 'Edit subtitles!' : 'Add subtitles!'}</Button>
           )}
         </EditButtonContainer>
       </MainContainer>
