@@ -184,6 +184,7 @@ export const TrackInput: React.FC<ITrackInput> = ({
         onBlur={onBlur}
         onInput={autoHeight(row.id)}
         value={row.text}
+        placeholder="Insert subtitle text here!"
       />
       <IconButton onClick={deleteCallback} title="Delete this row">
         <FiXCircle />
