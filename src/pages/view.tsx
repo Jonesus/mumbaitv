@@ -132,6 +132,7 @@ const View: NextPage = () => {
         videoElement.current.currentTime = row[fieldName];
       }
     });
+    window.scrollTo(0, 80);
   };
 
   /** Gets a short url from api */
