@@ -116,12 +116,20 @@ const Footer = styled.footer`
   color: var(--main-500);
 `;
 
+const FooterLink = styled.a`
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+`;
+
 export const MainContainer: React.FC = ({ children }) => (
   <>
     <Main>
       {children}
       <GlobalStyles />
     </Main>
-    <Footer>Works (best) on Chrome</Footer>
+    <Footer>
+      <FooterLink href="https://github.com/Jonesus/mumbaitv">Works (best) on Chrome</FooterLink>
+    </Footer>
   </>
 );
