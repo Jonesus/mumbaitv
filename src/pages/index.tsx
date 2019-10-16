@@ -151,7 +151,7 @@ const Home: NextPage = () => {
                 <GridItem key={clip}>
                   <Link href={videoLink}>
                     <StretchContainer href={videoLink}>
-                      <ImageLink src={`${CLIPS_URL}vintage/thumbnails/${clip}.jpg`} alt={clip} />
+                      <ImageLink src={`${CLIPS_URL}thumbnails/vintage/${clip}.jpg`} alt={clip} />
                     </StretchContainer>
                   </Link>
                 </GridItem>
