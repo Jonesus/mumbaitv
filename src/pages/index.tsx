@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
+import Head from 'next/head';
 import styled from 'styled-components';
 
 import { CLIPS_URL, SUBS_URL } from 'src/helpers';
@@ -74,33 +75,44 @@ const Home: NextPage = () => {
   }, []);
 
   return (
-    <MainContainer>
-      <H1>Mumbai TV</H1>
-      <IntroText>
-        Mumbai TV is a humorous video subtitling platform where you can show all your friends how
-        funny you think you are. A curated collection of crème de la crème movie clips are available
-        as your expression vessel of choice. Pick one below to get started:
-      </IntroText>
-      <LinkGrid>
-        {clips.map(clip => {
-          let subExtension = '';
-          const key = `${clip}.txt`;
-          if (Object.keys(subStubs).includes(key)) {
-            subExtension = `&sub=${subStubs[key]}`;
-          }
-          const videoLink = `/view?clip=${clip}${subExtension}`;
-          return (
-            <GridItem key={clip}>
-              <Link href={videoLink}>
-                <StretchContainer href={videoLink}>
-                  <ImageLink src={`${CLIPS_URL}thumbnails/${clip}.jpg`} alt={clip} />
-                </StretchContainer>
-              </Link>
-            </GridItem>
-          );
-        })}
-      </LinkGrid>
-    </MainContainer>
+    <>
+      <Head>
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://mumbaitv.online" />
+        <meta
+          property="og:image"
+          content="https://mumbaitv.online/static/android-chrome-192x192.png"
+        />
+      </Head>
+
+      <MainContainer>
+        <H1>Mumbai TV</H1>
+        <IntroText>
+          Mumbai TV is a humorous video subtitling platform where you can show all your friends how
+          funny you think you are. A curated collection of crème de la crème movie clips are
+          available as your expression vessel of choice. Pick one below to get started:
+        </IntroText>
+        <LinkGrid>
+          {clips.map(clip => {
+            let subExtension = '';
+            const key = `${clip}.txt`;
+            if (Object.keys(subStubs).includes(key)) {
+              subExtension = `&sub=${subStubs[key]}`;
+            }
+            const videoLink = `/view?clip=${clip}${subExtension}`;
+            return (
+              <GridItem key={clip}>
+                <Link href={videoLink}>
+                  <StretchContainer href={videoLink}>
+                    <ImageLink src={`${CLIPS_URL}thumbnails/${clip}.jpg`} alt={clip} />
+                  </StretchContainer>
+                </Link>
+              </GridItem>
+            );
+          })}
+        </LinkGrid>
+      </MainContainer>
+    </>
   );
 };
 

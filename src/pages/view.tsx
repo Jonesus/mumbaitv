@@ -1,8 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
-import { ITrackRow, subStringToTrackData, trackDataToSubString, CLIPS_URL } from 'src/helpers';
+import {
+  ITrackRow,
+  subStringToTrackData,
+  trackDataToSubString,
+  CLIPS_URL,
+  SITE_URL,
+} from 'src/helpers';
 
 import { TrackInput, TrackRows } from 'src/components/TrackInput';
 import { MainContainer } from 'src/components/MainContainer';
@@ -24,15 +31,21 @@ import { FiArrowLeft } from 'react-icons/fi';
 
 const View: NextPage = () => {
   const { query, route, asPath, replace, push } = useRouter();
+  const { clip, sub, short } = query;
+
   const [editing, setEditing] = useState(false);
   const toggleEditing = () => setEditing(!editing);
 
-  const [subTrackState, setSubTrackState] = useState<ITrackRow[]>([]);
-  const [subText, setSubText] = useState('');
-  const [initialLoad, setInitialLoad] = useState(false);
-  const [publishedUrl, setPublishedUrl] = useState('');
+  const initialTrackState =
+    typeof sub === 'string' ? subStringToTrackData(sub.replace(/ /g, '+')) : [];
+  const [subTrackState, setSubTrackState] = useState<ITrackRow[]>(initialTrackState);
 
-  const { clip, sub, short } = query;
+  const initialSubText = typeof sub === 'string' ? sub.replace(/ /g, '+') : '';
+  const [subText, setSubText] = useState(initialSubText);
+
+  const initialPublished = short ? `${SITE_URL}/s/${short}` : '';
+  const [publishedUrl, setPublishedUrl] = useState(initialPublished);
+
   const subSource = subText ? `data:text/vtt;charset=utf-8;base64,${subText}` : '';
   const videoSource = clip ? `${CLIPS_URL}${clip}` : '';
   const videoElement = useRef<HTMLVideoElement>(null);
@@ -46,16 +59,6 @@ const View: NextPage = () => {
       video.textTracks[0].mode = 'showing';
     }, 50);
   }, [videoElement, clip]);
-
-  // Refresh subTrack state after async load of query param
-  useEffect(() => {
-    if (!initialLoad && typeof sub === 'string' && sub !== '') {
-      setInitialLoad(true);
-      setSubTrackState(subStringToTrackData(sub.replace(/ /g, '+')));
-      setSubText(sub.replace(/ /g, '+'));
-      if (short) setPublishedUrl(`${window.location.origin}/s/${short}`);
-    }
-  }, [sub]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /** Updates the internal data structure containing the rows of sub texts */
   const trackRowOnChange = (rowIndex: number) => (
@@ -151,6 +154,13 @@ const View: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <meta property="og:type" content="video.movie" />
+        <meta property="og:url" content={`${SITE_URL}/s/${short}`} />
+        <meta property="og:image" content={`${CLIPS_URL}thumbnails/${clip}.jpg`} />
+        <meta property="og:video" content={videoSource} />
+        <meta property="og:video:type" content="video/mp4" />
+      </Head>
       <BackWrapper>
         <BackButton title="Go back" onClick={() => push('/')}>
           <FiArrowLeft />
@@ -200,5 +210,8 @@ const View: NextPage = () => {
     </>
   );
 };
+
+/** Proper metadata needs SSR */
+View.getInitialProps = async () => ({});
 
 export default View;

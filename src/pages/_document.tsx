@@ -30,7 +30,7 @@ class MyDocument extends Document {
 
   render() {
     return (
-      <Html lang="en">
+      <Html lang="en" prefix="og: http://ogp.me/ns#">
         <Head>
           <meta name="description" content="Mumbai TV is a humorous video subtitling platform" />
 
@@ -45,6 +45,8 @@ class MyDocument extends Document {
           <meta name="msapplication-TileColor" content="#ff9233" />
           <meta name="msapplication-config" content="/static/browserconfig.xml" />
           <meta name="theme-color" content="#ff9233" />
+
+          <meta property="og:title" content="Mumbai TV" />
 
           <link
             href="https://fonts.googleapis.com/css?family=Be+Vietnam|Mansalva&display=swap"

@@ -1,5 +1,6 @@
 import { Base64 } from 'js-base64';
 
+export const SITE_URL = 'https://mumbaitv.online';
 export const CLIPS_URL = 'https://inkubaattori.aalto.fi/mumbaitv/';
 export const SUBS_URL = 'https://inkubaattori.aalto.fi/mumbaitv/substubs/';
 
