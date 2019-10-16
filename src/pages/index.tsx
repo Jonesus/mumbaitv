@@ -8,12 +8,17 @@ import { CLIPS_URL, SUBS_URL } from 'src/helpers';
 
 import { MainContainer } from 'src/components/MainContainer';
 import { H1 } from 'src/components/Simple';
+import { RadioInput, RadioGroup, RadioLabel, RadioWrapper } from 'src/components/RadioGroup';
 
 const LinkGrid = styled.ul`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   grid-gap: 1rem;
   padding: 0;
+`;
+
+const SmallGrid = styled(LinkGrid)`
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
 `;
 
 const GridItem = styled.li`
@@ -54,13 +59,24 @@ const IntroText = styled.p`
 `;
 
 const Home: NextPage = () => {
+  const [showNew, setShowNew] = useState(true);
+  const updateShowNew = (event: React.FormEvent<HTMLInputElement>) => {
+    setShowNew(event.currentTarget.id === 'fresh');
+  };
   const [clips, setClips] = useState<string[]>([]);
+  const [vintage, setVintage] = useState<string[]>([]);
   const [subStubs, setSubStubs] = useState<{ [key: string]: string }>({});
 
   const getClips = async () => {
     const response = await fetch(CLIPS_URL);
     const data = await response.json();
     setClips(data);
+  };
+
+  const getVintage = async () => {
+    const response = await fetch(`${CLIPS_URL}vintage/`);
+    const data = await response.json();
+    setVintage(data);
   };
 
   const getInitialSubs = async () => {
@@ -71,6 +87,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     getClips();
+    getVintage();
     getInitialSubs();
   }, []);
 
@@ -92,25 +109,56 @@ const Home: NextPage = () => {
           funny you think you are. A curated collection of crème de la crème movie clips are
           available as your expression vessel of choice. Pick one below to get started:
         </IntroText>
-        <LinkGrid>
-          {clips.map(clip => {
-            let subExtension = '';
-            const key = `${clip}.txt`;
-            if (Object.keys(subStubs).includes(key)) {
-              subExtension = `&sub=${subStubs[key]}`;
-            }
-            const videoLink = `/view?clip=${clip}${subExtension}`;
-            return (
-              <GridItem key={clip}>
-                <Link href={videoLink}>
-                  <StretchContainer href={videoLink}>
-                    <ImageLink src={`${CLIPS_URL}thumbnails/${clip}.jpg`} alt={clip} />
-                  </StretchContainer>
-                </Link>
-              </GridItem>
-            );
-          })}
-        </LinkGrid>
+        <RadioWrapper>
+          <legend>Show videos:</legend>
+          <RadioGroup>
+            <RadioInput id="fresh" name="show" onChange={updateShowNew} defaultChecked />
+            <RadioLabel htmlFor="fresh">Fresh films</RadioLabel>
+            <RadioInput id="vintage" name="show" onChange={updateShowNew} />
+            <RadioLabel htmlFor="vintage">Vintage videos</RadioLabel>
+          </RadioGroup>
+        </RadioWrapper>
+        {showNew ? (
+          <LinkGrid>
+            {clips.map(clip => {
+              let subExtension = '';
+              const key = `${clip}.txt`;
+              if (Object.keys(subStubs).includes(key)) {
+                subExtension = `&sub=${subStubs[key]}`;
+              }
+              const videoLink = `/view?clip=${clip}${subExtension}`;
+              return (
+                <GridItem key={clip}>
+                  <Link href={videoLink}>
+                    <StretchContainer href={videoLink}>
+                      <ImageLink src={`${CLIPS_URL}thumbnails/${clip}.jpg`} alt={clip} />
+                    </StretchContainer>
+                  </Link>
+                </GridItem>
+              );
+            })}
+          </LinkGrid>
+        ) : (
+          <SmallGrid>
+            {vintage.map(clip => {
+              let subExtension = '';
+              const key = `${clip}.txt`;
+              if (Object.keys(subStubs).includes(key)) {
+                subExtension = `&sub=${subStubs[key]}`;
+              }
+              const videoLink = `/view?clip=vintage/${clip}${subExtension}`;
+              return (
+                <GridItem key={clip}>
+                  <Link href={videoLink}>
+                    <StretchContainer href={videoLink}>
+                      <ImageLink src={`${CLIPS_URL}vintage/thumbnails/${clip}.jpg`} alt={clip} />
+                    </StretchContainer>
+                  </Link>
+                </GridItem>
+              );
+            })}
+          </SmallGrid>
+        )}
       </MainContainer>
     </>
   );
