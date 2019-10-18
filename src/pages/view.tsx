@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import Head from 'next/head';
 
 import {
   ITrackRow,
@@ -10,11 +9,10 @@ import {
   CLIPS_URL,
   SITE_URL,
 } from 'src/helpers';
+import { IShortUrl } from 'src/models';
 
 import { TrackInput, TrackRows } from 'src/components/TrackInput';
 import { MainContainer } from 'src/components/MainContainer';
-import { IShortUrl } from 'src/models';
-
 import {
   H1,
   Video,
@@ -26,12 +24,17 @@ import {
   EditorContainer,
   PublishedLink,
   BackWrapper,
+  TitleInput,
+  LastRow,
 } from 'src/components/Simple';
+import { Meta } from 'src/components/Meta';
 import { FiArrowLeft } from 'react-icons/fi';
 
 const View: NextPage = () => {
   const { query, route, asPath, replace, push } = useRouter();
   const { clip, sub, short } = query;
+  const urlParams = new URLSearchParams(asPath);
+  const title = urlParams.get('title');
 
   const [editing, setEditing] = useState(false);
   const toggleEditing = () => setEditing(!editing);
@@ -45,6 +48,10 @@ const View: NextPage = () => {
 
   const initialPublished = short ? `${SITE_URL}/s/${short}` : '';
   const [publishedUrl, setPublishedUrl] = useState(initialPublished);
+
+  const [titleState, setTitleState] = useState('');
+  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setTitleState(e.currentTarget.value);
 
   const subSource = subText ? `data:text/vtt;charset=utf-8;base64,${subText}` : '';
   const videoSource = clip ? `${CLIPS_URL}${clip}` : '';
@@ -142,10 +149,11 @@ const View: NextPage = () => {
 
   /** Gets a short url from api */
   const publish = async () => {
+    const body = { long: asPath, title: titleState !== '' ? titleState : undefined };
     const resp = await fetch('/api/shorten', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ long: asPath }),
+      body: JSON.stringify(body),
     });
     const data: IShortUrl = await resp.json();
     setPublishedUrl(`${window.location.origin}/s/${data.short}`);
@@ -154,20 +162,23 @@ const View: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <meta property="og:type" content="video.movie" />
-        <meta property="og:url" content={`${SITE_URL}/s/${short}`} />
-        <meta property="og:image" content={`${CLIPS_URL}thumbnails/${clip}.jpg`} />
+      <Meta
+        title={title as string}
+        description={subTrackState[0] && subTrackState[0].text}
+        og_url={`${SITE_URL}/s/${short}`}
+        og_image={`${CLIPS_URL}thumbnails/${clip}.jpg`}
+        og_type="video.movie"
+      >
         <meta property="og:video" content={videoSource} />
         <meta property="og:video:type" content="video/mp4" />
-      </Head>
+      </Meta>
       <BackWrapper>
         <BackButton title="Go back" onClick={() => push('/')}>
           <FiArrowLeft />
         </BackButton>
       </BackWrapper>
       <MainContainer>
-        <H1>Mumbai TV {editing ? 'Editor' : 'Theater'}</H1>
+        <H1>{title || `Mumbai TV ${editing ? 'Editor' : 'Theater'}`}</H1>
         <Video controls ref={videoElement}>
           <source src={videoSource} type="video/mp4" />
           <track label="English" kind="subtitles" src={subSource} default />
@@ -191,12 +202,19 @@ const View: NextPage = () => {
                 />
               ))}
             </TrackRows>
-            <Button onClick={addRow} style={{ float: 'left' }}>
-              Add row
-            </Button>
-            <OrangeButton onClick={publish} style={{ float: 'right' }}>
-              Publish!
-            </OrangeButton>
+            <LastRow>
+              <Button onClick={addRow} style={{ marginRight: '1em', marginTop: '1em' }}>
+                Add row
+              </Button>
+              <TitleInput
+                onChange={onTitleChange}
+                value={titleState}
+                placeholder="Add a title for public list"
+              />
+              <OrangeButton onClick={publish} style={{ marginLeft: '1em', marginTop: '1em' }}>
+                {titleState === '' ? 'Save' : 'Publish'}
+              </OrangeButton>
+            </LastRow>
           </EditorContainer>
         )}
         <EditButtonContainer>

@@ -9,15 +9,15 @@ ShortUrlPage.getInitialProps = async ({ res, query }) => {
   const { slug } = query;
   await connectToDb();
 
-  const { long } = (await ShortUrl.findOne({ short: slug })) || { long: 'notfound' };
+  const { long, title } = (await ShortUrl.findOne({ short: slug })) || { long: 'notfound' };
 
   if (res) {
     res.writeHead(302, {
-      Location: `${long}&short=${slug}`,
+      Location: `${long}&short=${slug}${title ? `&title=${title}` : ''}`,
     });
     res.end();
   } else {
-    Router.push(`${long}&short=${slug}`);
+    Router.push(`${long}&short=${slug}${title ? `&title=${title}` : ''}`);
   }
 
   return {};

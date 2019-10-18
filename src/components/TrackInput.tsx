@@ -6,6 +6,7 @@ import { BaseButton, TextInput } from 'src/components/Simple';
 
 export const TrackRows = styled.ol`
   padding: 0;
+  margin-top: 0;
 
   @media only screen and (max-width: 36em) {
     font-size: 0.8em;

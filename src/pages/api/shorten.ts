@@ -4,22 +4,22 @@ import { ShortUrl } from 'src/models';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
-  const { long } = req.body;
+  const { long, title: newTitle } = req.body;
   const randShort = Math.random()
     .toString(36)
     .slice(2);
 
   await connectToDb();
-  const { short } = (await ShortUrl.findOne({ long })) || { short: null };
+  const { short, title } = (await ShortUrl.findOne({ long })) || { short: null, title: null };
 
   switch (method) {
     case 'POST':
       res.setHeader('Content-Type', 'application/json');
       if (short === null) {
-        await ShortUrl.create({ long, short: randShort });
-        res.status(200).json({ short: randShort, long });
+        await ShortUrl.create({ short: randShort, long, title: newTitle });
+        res.status(200).json({ short: randShort, long, title: newTitle });
       } else {
-        res.status(200).json({ short, long });
+        res.status(200).json({ short, long, title });
       }
 
       break;

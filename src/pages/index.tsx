@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import Head from 'next/head';
 import styled from 'styled-components';
 
 import { CLIPS_URL, SUBS_URL } from 'src/helpers';
@@ -9,6 +8,7 @@ import { CLIPS_URL, SUBS_URL } from 'src/helpers';
 import { MainContainer } from 'src/components/MainContainer';
 import { H1 } from 'src/components/Simple';
 import { RadioInput, RadioGroup, RadioLabel, RadioWrapper } from 'src/components/RadioGroup';
+import { Meta } from 'src/components/Meta';
 
 const LinkGrid = styled.ul`
   display: grid;
@@ -93,15 +93,7 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://mumbaitv.online" />
-        <meta
-          property="og:image"
-          content="https://mumbaitv.online/static/android-chrome-192x192.png"
-        />
-      </Head>
-
+      <Meta />
       <MainContainer>
         <H1>Mumbai TV</H1>
         <IntroText>
@@ -129,7 +121,7 @@ const Home: NextPage = () => {
               const videoLink = `/view?clip=${clip}${subExtension}`;
               return (
                 <GridItem key={clip}>
-                  <Link href={videoLink}>
+                  <Link href={videoLink} scroll={false}>
                     <StretchContainer href={videoLink}>
                       <ImageLink src={`${CLIPS_URL}thumbnails/${clip}.jpg`} alt={clip} />
                     </StretchContainer>

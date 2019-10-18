@@ -161,6 +161,29 @@ const LinkInput = styled(TextInput).attrs({ readOnly: true })`
   text-align: center;
 `;
 
+export const TitleInput = styled.input`
+  border: none;
+  font: inherit;
+  background-color: inherit;
+  resize: none;
+  overflow: hidden;
+  flex-grow: 1;
+  border-radius: 2em;
+  padding: 0.4em 1em 0.5em;
+  background-color: var(--white);
+  border: 1px solid var(--grey-200);
+  margin-top: 1em;
+  @media only screen and (max-width: 36em) {
+    font-size: 0.7em;
+  }
+`;
+
+export const LastRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+`;
+
 const CopyButton = styled(BaseButton)`
   background-color: var(--white);
   border-radius: 0 2em 2em 0;

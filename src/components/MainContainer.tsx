@@ -1,6 +1,5 @@
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
-import Head from 'next/head';
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -125,9 +124,6 @@ const FooterLink = styled.a`
 
 export const MainContainer: React.FC = ({ children }) => (
   <>
-    <Head>
-      <title>Mumbai TV</title>
-    </Head>
     <Main>
       {children}
       <GlobalStyles />
