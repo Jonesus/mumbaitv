@@ -36,4 +36,11 @@ export const RadioWrapper = styled.fieldset`
   padding: 0;
   margin: inherit;
   margin-top: calc(var(--decoration-pad) * 1.5);
+
+  @media only screen and (max-width: 36em) {
+    font-size: 0.8em;
+  }
+  @media only screen and (max-width: 24em) {
+    font-size: 0.7em;
+  }
 `;
