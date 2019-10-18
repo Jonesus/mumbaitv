@@ -26,6 +26,20 @@ export const H1 = styled.h1`
   }
 `;
 
+export const IntroText = styled.p`
+  font-size: 1.2em;
+  border-radius: var(--decoration-radius-base);
+  background-color: var(--white);
+  padding: 1em 1.5em;
+  margin-bottom: 0;
+  @media only screen and (max-width: 36em) {
+    font-size: 1em;
+  }
+  @media only screen and (max-width: 24em) {
+    font-size: 0.8em;
+  }
+`;
+
 export const Video = styled.video`
   width: 100%;
   border-radius: var(--decoration-radius-base);

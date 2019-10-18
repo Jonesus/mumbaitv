@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { CLIPS_URL, SUBS_URL } from 'src/helpers';
 
 import { MainContainer } from 'src/components/MainContainer';
-import { H1 } from 'src/components/Simple';
+import { H1, IntroText } from 'src/components/Simple';
 import { RadioInput, RadioGroup, RadioLabel, RadioWrapper } from 'src/components/RadioGroup';
 import { Meta } from 'src/components/Meta';
 import { useGlobalState } from 'src/pages/_app';
@@ -42,21 +42,8 @@ const StretchContainer = styled.a`
 const ImageLink = styled.img`
   object-fit: cover;
   height: auto;
+  max-height: 10rem;
   width: 100%;
-`;
-
-const IntroText = styled.p`
-  font-size: 1.2em;
-  border-radius: var(--decoration-radius-base);
-  background-color: var(--white);
-  padding: 1em 1.5em;
-  margin-bottom: 0;
-  @media only screen and (max-width: 36em) {
-    font-size: 1em;
-  }
-  @media only screen and (max-width: 24em) {
-    font-size: 0.8em;
-  }
 `;
 
 const Home: NextPage = () => {
@@ -100,7 +87,8 @@ const Home: NextPage = () => {
         <IntroText>
           Mumbai TV is a humorous video subtitling platform where you can show all your friends how
           funny you think you are. A curated collection of crème de la crème movie clips are
-          available as your expression vessel of choice. Pick one below to get started:
+          available as your expression vessel of choice. Pick one below to get started or{' '}
+          <Link href="/browse">browse through existing creations</Link>:
         </IntroText>
         <RadioWrapper>
           <legend>Show videos:</legend>

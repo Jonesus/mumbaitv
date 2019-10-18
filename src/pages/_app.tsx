@@ -2,11 +2,13 @@ import React from 'react';
 import App from 'next/app';
 
 import { createGlobalState } from 'react-hooks-global-state';
+import { IShortUrl } from 'src/models';
 
 const initialState = {
   clips: [] as string[],
   vintage: [] as string[],
   subStubs: {} as { [key: string]: string },
+  linkList: [] as IShortUrl[],
   showNew: true,
 };
 const { GlobalStateProvider, useGlobalState } = createGlobalState(initialState);
