@@ -29,6 +29,7 @@ export const Meta: React.FC<IMeta> = ({
     <meta name="application-name" content={SITE_NAME} />
 
     <meta property="og:title" content={title || SITE_NAME} />
+    <meta property="og:description" content={description || DEFAULT_DESCRIPTION} />
     <meta property="og:type" content={og_type || 'website'} />
     <meta property="og:url" content={og_url || SITE_URL} />
     <meta property="og:site_name" content={SITE_NAME} />

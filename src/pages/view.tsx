@@ -30,9 +30,7 @@ import { Back } from 'src/components/BackButton';
 
 const View: NextPage = () => {
   const { query, route, asPath, replace } = useRouter();
-  const { clip, sub, short } = query;
-  const urlParams = new URLSearchParams(asPath);
-  const title = urlParams.get('title');
+  const { clip, sub, short, title } = query;
 
   const [editing, setEditing] = useState(false);
   const toggleEditing = () => setEditing(!editing);
