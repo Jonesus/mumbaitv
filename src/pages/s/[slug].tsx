@@ -13,11 +13,11 @@ ShortUrlPage.getInitialProps = async ({ res, query }) => {
 
   if (res) {
     res.writeHead(302, {
-      Location: `${long}&short=${slug}${title ? `&title=${title}` : ''}`,
+      Location: `${long}&short=${slug}${title ? `&title=${encodeURIComponent(title)}` : ''}`,
     });
     res.end();
   } else {
-    Router.push(`${long}&short=${slug}${title ? `&title=${title}` : ''}`);
+    Router.push(`${long}&short=${slug}${title ? `&title=${encodeURIComponent(title)}` : ''}`);
   }
 
   return {};
