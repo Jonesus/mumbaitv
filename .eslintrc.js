@@ -31,7 +31,7 @@ module.exports = {
     'react/jsx-props-no-spreading': ['off'],
     'react/destructuring-assignment': ['off'],
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
+    'react-hooks/exhaustive-deps': 'off',
     'no-console': ['off'],
     'react/prop-types': ['off'],
     'import/prefer-default-export': ['off'],

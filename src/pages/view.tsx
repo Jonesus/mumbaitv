@@ -17,21 +17,19 @@ import {
   H1,
   Video,
   Button,
-  BackButton,
   OrangeButton,
   OutlineButton,
   EditButtonContainer,
   EditorContainer,
   PublishedLink,
-  BackWrapper,
   TitleInput,
   LastRow,
 } from 'src/components/Simple';
 import { Meta } from 'src/components/Meta';
-import { FiArrowLeft } from 'react-icons/fi';
+import { Back } from 'src/components/BackButton';
 
 const View: NextPage = () => {
-  const { query, route, asPath, replace, push } = useRouter();
+  const { query, route, asPath, replace } = useRouter();
   const { clip, sub, short } = query;
   const urlParams = new URLSearchParams(asPath);
   const title = urlParams.get('title');
@@ -172,11 +170,7 @@ const View: NextPage = () => {
         <meta property="og:video" content={videoSource} />
         <meta property="og:video:type" content="video/mp4" />
       </Meta>
-      <BackWrapper>
-        <BackButton title="Go back" onClick={() => push('/')}>
-          <FiArrowLeft />
-        </BackButton>
-      </BackWrapper>
+      <Back />
       <MainContainer>
         <H1>{title || `Mumbai TV ${editing ? 'Editor' : 'Theater'}`}</H1>
         <Video controls ref={videoElement}>

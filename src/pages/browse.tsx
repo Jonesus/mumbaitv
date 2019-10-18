@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
 
 import { SITE_URL } from 'src/helpers';
 
 import { MainContainer } from 'src/components/MainContainer';
 import { IShortUrl } from 'src/models';
 
-import { H1, BackButton, BackWrapper } from 'src/components/Simple';
-import { FiArrowLeft } from 'react-icons/fi';
+import { H1 } from 'src/components/Simple';
 import { Meta } from 'src/components/Meta';
+import { Back } from 'src/components/BackButton';
 
 const View: NextPage = () => {
-  const { push } = useRouter();
   const [linkList, setLinkList] = useState<IShortUrl[]>([]);
 
   const getLinks = async () => {
@@ -28,11 +26,7 @@ const View: NextPage = () => {
   return (
     <>
       <Meta />
-      <BackWrapper>
-        <BackButton title="Go back" onClick={() => push('/')}>
-          <FiArrowLeft />
-        </BackButton>
-      </BackWrapper>
+      <Back />
       <MainContainer>
         <H1>Mumbai TV directory</H1>
         <ul>

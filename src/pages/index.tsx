@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import styled from 'styled-components';
@@ -9,6 +9,7 @@ import { MainContainer } from 'src/components/MainContainer';
 import { H1 } from 'src/components/Simple';
 import { RadioInput, RadioGroup, RadioLabel, RadioWrapper } from 'src/components/RadioGroup';
 import { Meta } from 'src/components/Meta';
+import { useGlobalState } from 'src/pages/_app';
 
 const LinkGrid = styled.ul`
   display: grid;
@@ -59,13 +60,13 @@ const IntroText = styled.p`
 `;
 
 const Home: NextPage = () => {
-  const [showNew, setShowNew] = useState(true);
+  const [showNew, setShowNew] = useGlobalState('showNew');
   const updateShowNew = (event: React.FormEvent<HTMLInputElement>) => {
     setShowNew(event.currentTarget.id === 'fresh');
   };
-  const [clips, setClips] = useState<string[]>([]);
-  const [vintage, setVintage] = useState<string[]>([]);
-  const [subStubs, setSubStubs] = useState<{ [key: string]: string }>({});
+  const [clips, setClips] = useGlobalState('clips');
+  const [vintage, setVintage] = useGlobalState('vintage');
+  const [subStubs, setSubStubs] = useGlobalState('subStubs');
 
   const getClips = async () => {
     const response = await fetch(CLIPS_URL);
