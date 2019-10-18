@@ -132,8 +132,8 @@ const Home: NextPage = () => {
             {vintage.map(clip => {
               let subExtension = '';
               const key = `${clip}.txt`;
-              if (Object.keys(subStubs).includes(key)) {
-                subExtension = `&sub=${subStubs[key]}`;
+              if (Object.keys(subStubs).includes(`vintage/${key}`)) {
+                subExtension = `&sub=${subStubs[`vintage/${key}`]}`;
               }
               const videoLink = `/view?clip=vintage/${clip}${subExtension}`;
               return (
