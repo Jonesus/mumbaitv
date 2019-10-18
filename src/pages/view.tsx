@@ -165,11 +165,7 @@ const View: NextPage = () => {
         description={subTrackState[0] && subTrackState[0].text}
         og_url={`${SITE_URL}/s/${short}`}
         og_image={`${CLIPS_URL}thumbnails/${clip}.jpg`}
-        og_type="video.movie"
-      >
-        <meta property="og:video" content={videoSource} />
-        <meta property="og:video:type" content="video/mp4" />
-      </Meta>
+      />
       <Back />
       <MainContainer>
         <H1>{title || `Mumbai TV ${editing ? 'Editor' : 'Theater'}`}</H1>
