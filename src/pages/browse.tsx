@@ -41,7 +41,7 @@ const ListItem = styled.li`
   }
 `;
 
-const View: NextPage = () => {
+const Browse: NextPage = () => {
   const [linkList, setLinkList] = useGlobalState('linkList');
 
   const getLinks = async () => {
@@ -77,4 +77,4 @@ const View: NextPage = () => {
   );
 };
 
-export default View;
+export default Browse;

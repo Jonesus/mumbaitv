@@ -10,6 +10,7 @@ import { H1, IntroText } from 'src/components/Simple';
 import { RadioInput, RadioGroup, RadioLabel, RadioWrapper } from 'src/components/RadioGroup';
 import { Meta } from 'src/components/Meta';
 import { useGlobalState } from 'src/pages/_app';
+import { IShortUrl } from 'src/models';
 
 const LinkGrid = styled.ul`
   display: grid;
@@ -54,6 +55,7 @@ const Home: NextPage = () => {
   const [clips, setClips] = useGlobalState('clips');
   const [vintage, setVintage] = useGlobalState('vintage');
   const [subStubs, setSubStubs] = useGlobalState('subStubs');
+  const [, setLinkList] = useGlobalState('linkList');
 
   const getClips = async () => {
     const response = await fetch(CLIPS_URL);
@@ -72,11 +74,17 @@ const Home: NextPage = () => {
     const data = await response.json();
     setSubStubs(data);
   };
+  const getLinks = async () => {
+    const response = await fetch('/api/list');
+    const shortUrls: IShortUrl[] = await response.json();
+    setLinkList(shortUrls);
+  };
 
   useEffect(() => {
     getClips();
     getVintage();
     getInitialSubs();
+    getLinks();
   }, []);
 
   return (
