@@ -11,6 +11,7 @@ export const H1 = styled.h1`
   font-size: 3rem;
   text-align: center;
   line-height: 1em;
+  word-break: break-word;
 
   background-color: var(--white);
   text-shadow: 0.04em 0.04em 0.04em var(--grey-300);
