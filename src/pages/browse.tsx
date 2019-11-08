@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
 import { NextPage } from 'next';
-
-import { SITE_URL } from 'src/helpers';
+import Link from 'next/link';
+import styled from 'styled-components';
 
 import { MainContainer } from 'src/components/MainContainer';
 import { IShortUrl } from 'src/models';
@@ -25,6 +24,7 @@ const ListItem = styled.li`
   position: relative;
   list-style: none;
   font-size: 1.3em;
+  word-break: break-word;
 
   &:before {
     content: '⚫';
@@ -68,7 +68,7 @@ const Browse: NextPage = () => {
         <List>
           {linkList.map(link => (
             <ListItem key={link.short}>
-              <a href={`${SITE_URL}/s/${link.short}`}>{link.title}</a>
+              <Link href={`/s/${link.short}`}>{link.title}</Link>
             </ListItem>
           ))}
         </List>
