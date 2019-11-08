@@ -101,9 +101,14 @@ const Home: NextPage = () => {
         <RadioWrapper>
           <legend>Show videos:</legend>
           <RadioGroup>
-            <RadioInput id="fresh" name="show" onChange={updateShowNew} defaultChecked />
+            <RadioInput id="fresh" name="show" onChange={updateShowNew} defaultChecked={showNew} />
             <RadioLabel htmlFor="fresh">Fresh films</RadioLabel>
-            <RadioInput id="vintage" name="show" onChange={updateShowNew} />
+            <RadioInput
+              id="vintage"
+              name="show"
+              onChange={updateShowNew}
+              defaultChecked={!showNew}
+            />
             <RadioLabel htmlFor="vintage">Vintage videos</RadioLabel>
           </RadioGroup>
         </RadioWrapper>
